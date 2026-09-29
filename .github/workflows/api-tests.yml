@@ -36,10 +36,10 @@ jobs:
       - name: Display tool versions
         run: |
           java -version
-          mvn -version
+          ./mvnw -version
 
       - name: Run tests and quality check
-        run: mvn --batch-mode --no-transfer-progress clean verify
+        run: ./mvnw --batch-mode --no-transfer-progress clean verify
 
       - name: Upload test reports
         if: always()
