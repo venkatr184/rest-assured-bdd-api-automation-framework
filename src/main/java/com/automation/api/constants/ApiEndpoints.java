@@ -1,5 +1,6 @@
 package com.automation.api.constants;
 
+/** Defines endpoint paths used by the Posts API client. */
 public final class ApiEndpoints {
 
   public static final String POSTS = "/posts";

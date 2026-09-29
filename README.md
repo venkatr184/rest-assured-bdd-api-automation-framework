@@ -22,6 +22,9 @@ This independently developed portfolio project demonstrates reusable API-client 
 
 ## Key Features
 
+- Google Java Format enforcement with Spotless
+- Static coding-standard validation with Checkstyle
+- Maven `verify` quality gate
 - Reusable request and response specifications
 - Environment-based configuration
 - System-property and environment-variable overrides

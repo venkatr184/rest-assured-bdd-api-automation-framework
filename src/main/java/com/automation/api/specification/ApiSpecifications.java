@@ -11,12 +11,18 @@ import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
 
+/** Creates reusable REST Assured request and response specifications. */
 public final class ApiSpecifications {
 
   private ApiSpecifications() {
     // Prevent object creation.
   }
 
+  /**
+   * Creates a new request specification for an API operation.
+   *
+   * @return configured request specification
+   */
   public static RequestSpecification createRequestSpecification() {
     return new RequestSpecBuilder()
         .setBaseUri(ConfigurationManager.getRequiredProperty("base.url"))
@@ -26,6 +32,11 @@ public final class ApiSpecifications {
         .build();
   }
 
+  /**
+   * Creates a JSON response specification with the configured response-time limit.
+   *
+   * @return configured response specification
+   */
   public static ResponseSpecification createJsonResponseSpecification() {
     long timeout = Long.parseLong(ConfigurationManager.getRequiredProperty("request.timeout"));
 
