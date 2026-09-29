@@ -21,7 +21,7 @@
         <maven.compiler.release>17</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <restassured.version>5.5.7</restassured.version>
+        <restassured.version>6.0.1</restassured.version>
         <cucumber.version>7.34.8</cucumber.version>
         <junit.jupiter.version>5.14.2</junit.jupiter.version>
         <junit.platform.version>1.14.2</junit.platform.version>
