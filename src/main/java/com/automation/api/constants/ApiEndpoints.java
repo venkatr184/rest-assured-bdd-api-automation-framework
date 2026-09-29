@@ -2,10 +2,10 @@ package com.automation.api.constants;
 
 public final class ApiEndpoints {
 
-    public static final String POSTS = "/posts";
-    public static final String POST_BY_ID = POSTS + "/{postId}";
+  public static final String POSTS = "/posts";
+  public static final String POST_BY_ID = POSTS + "/{postId}";
 
-    private ApiEndpoints() {
-        // Prevent object creation.
-    }
+  private ApiEndpoints() {
+    // Prevent object creation.
+  }
 }

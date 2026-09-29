@@ -31,6 +31,7 @@
         <maven.surefire.plugin.version>3.5.4</maven.surefire.plugin.version>
         <allure.version>2.35.5</allure.version>
         <wiremock.version>3.13.2</wiremock.version>
+		<spotless.version>3.10.2</spotless.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -158,7 +159,30 @@
                     <useModulePath>false</useModulePath>
                 </configuration>
             </plugin>
+			<plugin>
+				<groupId>com.diffplug.spotless</groupId>
+				<artifactId>spotless-maven-plugin</artifactId>
+				<version>${spotless.version}</version>
 
+				<configuration>
+					<java>
+						<googleJavaFormat/>
+						<removeUnusedImports/>
+						<trimTrailingWhitespace/>
+						<endWithNewline/>
+					</java>
+				</configuration>
+
+				<executions>
+					<execution>
+						<id>spotless-check</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
         </plugins>
     </build>
 
