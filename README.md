@@ -50,6 +50,7 @@ This independently developed portfolio project demonstrates reusable API-client 
 - Authentication-header masking
 - Authorized and unauthorized API scenarios
 - Automated Maven and GitHub Actions dependency updates
+- Reproducible Maven builds through Maven Wrapper
 
 ## Architecture
 
@@ -100,9 +101,10 @@ src
 ## Prerequisites
 
 - Java 17 or later
-- Maven 3.9 or later
 - Git
 - Allure CLI, optional for viewing Allure reports
+
+Maven installation is optional because the repository includes Maven Wrapper.
 
 Verify the installation:
 
@@ -115,7 +117,7 @@ git --version
 ## Run the Complete Suite
 
 ```bash
-mvn clean test
+./mvnw clean verify
 ```
 
 By default, the suite starts an embedded WireMock server and executes against deterministic mock responses.
