@@ -1,5 +1,7 @@
 # REST Assured BDD API Automation Framework
 
+[![API Automation Tests](https://github.com/venkatr184/rest-assured-bdd-api-automation-framework/actions/workflows/api-tests.yml/badge.svg)](https://github.com/venkatr184/rest-assured-bdd-api-automation-framework/actions/workflows/api-tests.yml)
+
 A production-style API automation framework built with Java, REST Assured, Cucumber BDD, JUnit 5, Maven and WireMock.
 
 This independently developed portfolio project demonstrates reusable API-client design, business-readable BDD scenarios, schema validation, service virtualization, parallel execution and automated reporting.
