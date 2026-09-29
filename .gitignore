@@ -7,6 +7,9 @@ target/
 *.iws
 *.ipr
 out/
+.classpath
+.project
+.settings
 
 # Environment variables and secrets
 .env
