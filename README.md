@@ -49,6 +49,7 @@ This independently developed portfolio project demonstrates reusable API-client 
 - Environment-based secret injection
 - Authentication-header masking
 - Authorized and unauthorized API scenarios
+- Automated Maven and GitHub Actions dependency updates
 
 ## Architecture
 
@@ -262,6 +263,12 @@ mvn clean verify
 git status --short
 git diff --stat
 ```
+
+## Dependency Maintenance
+
+Dependabot checks Maven dependencies and GitHub Actions every Sunday. Minor and patch updates are grouped, while major upgrades are raised separately for controlled review.
+
+Every dependency update must pass the Maven quality gate before merging.
 
 ## Disclaimer
 
