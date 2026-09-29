@@ -33,6 +33,7 @@
         <wiremock.version>3.13.2</wiremock.version>
 		<spotless.version>3.10.2</spotless.version>
 		<checkstyle.plugin.version>3.6.0</checkstyle.plugin.version>
+		<includeTestSourceDirectory>false</includeTestSourceDirectory>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -191,7 +192,7 @@
 
 				<configuration>
 					<configLocation>google_checks.xml</configLocation>
-					<includeTestSourceDirectory>true</includeTestSourceDirectory>
+					<includeTestSourceDirectory>false</includeTestSourceDirectory>
 					<consoleOutput>true</consoleOutput>
 					<failOnViolation>true</failOnViolation>
 					<violationSeverity>warning</violationSeverity>

@@ -7,8 +7,15 @@ import com.automation.api.model.request.CreatePostRequest;
 import com.automation.api.specification.ApiSpecifications;
 import io.restassured.response.Response;
 
+/** Provides reusable operations for interacting with the Posts API. */
 public class PostsClient {
 
+  /**
+   * Retrieves a post using its identifier.
+   *
+   * @param postId post identifier
+   * @return raw API response
+   */
   public Response getPostById(int postId) {
     return given()
         .spec(ApiSpecifications.createRequestSpecification())
@@ -25,6 +32,12 @@ public class PostsClient {
         .response();
   }
 
+  /**
+   * Creates a post using the supplied request payload.
+   *
+   * @param request post-creation request
+   * @return raw API response
+   */
   public Response createPost(CreatePostRequest request) {
     return given()
         .spec(ApiSpecifications.createRequestSpecification())
