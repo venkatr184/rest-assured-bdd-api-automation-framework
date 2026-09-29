@@ -22,7 +22,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <restassured.version>5.5.7</restassured.version>
-        <cucumber.version>7.34.8</cucumber.version>
+        <cucumber.version>8.0.2</cucumber.version>
         <junit.jupiter.version>5.14.2</junit.jupiter.version>
         <junit.platform.version>1.14.2</junit.platform.version>
         <jackson.version>2.21.7</jackson.version>
