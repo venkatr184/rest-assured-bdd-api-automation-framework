@@ -2,6 +2,7 @@ package com.automation.api.config;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Optional;
 import java.util.Properties;
 
 /**
@@ -48,6 +49,21 @@ public final class ConfigurationManager {
    * @throws IllegalStateException when the property cannot be resolved
    */
   public static String getRequiredProperty(String key) {
+    return getOptionalProperty(key)
+        .orElseThrow(() -> new IllegalStateException("Required configuration is missing: " + key));
+  }
+
+  private static String toEnvironmentVariable(String key) {
+    return key.toUpperCase().replace('.', '_');
+  }
+
+  /**
+   * Resolves an optional configuration value.
+   *
+   * @param key configuration-property key
+   * @return resolved value, or an empty optional when unavailable
+   */
+  public static Optional<String> getOptionalProperty(String key) {
     String value = System.getProperty(key);
 
     if (value == null || value.isBlank()) {
@@ -59,13 +75,9 @@ public final class ConfigurationManager {
     }
 
     if (value == null || value.isBlank()) {
-      throw new IllegalStateException("Required configuration is missing: " + key);
+      return Optional.empty();
     }
 
-    return value.trim();
-  }
-
-  private static String toEnvironmentVariable(String key) {
-    return key.toUpperCase().replace('.', '_');
+    return Optional.of(value.trim());
   }
 }

@@ -45,6 +45,10 @@ This independently developed portfolio project demonstrates reusable API-client 
 - Automatic failure-response attachment
 - Cucumber HTML and JSON reports
 - Interactive Allure reports
+- Centralized optional API-key authentication
+- Environment-based secret injection
+- Authentication-header masking
+- Authorized and unauthorized API scenarios
 
 ## Architecture
 
@@ -224,6 +228,8 @@ allure serve target/allure-results
 - Validate request method, endpoint, headers and body
 - Validate resource-not-found responses
 - Validate internal-server-error responses
+- Validate authenticated API requests
+- Validate unauthorized responses when credentials are missing
 
 ## Security
 
@@ -232,6 +238,30 @@ allure serve target/allure-results
 - Generated reports and environment files are ignored.
 - Only synthetic test data is used.
 - The project contains no proprietary source code or internal company information.
+
+## Authentication
+
+API-key authentication is applied centrally by the request-specification layer.
+
+Configure it using an environment variable:
+
+```bash
+export API_KEY=your-secure-api-key
+mvn test -Dwiremock.enabled=false
+(OR)
+mvn test -Dwiremock.enabled=false -Dapi.key=your-secure-api-key
+```
+
+
+### Validate before committing
+
+```bash
+mvn checkstyle:check
+mvn spotless:apply
+mvn clean verify
+git status --short
+git diff --stat
+```
 
 ## Disclaimer
 
