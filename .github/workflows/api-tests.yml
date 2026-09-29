@@ -38,8 +38,8 @@ jobs:
           java -version
           mvn -version
 
-      - name: Run API test suite
-        run: mvn --batch-mode --no-transfer-progress clean test
+      - name: Run tests and quality check
+        run: mvn --batch-mode --no-transfer-progress clean verify
 
       - name: Upload test reports
         if: always()
