@@ -108,4 +108,11 @@ public class PostSteps {
 
     assertEquals(expectedMessage, actualMessage, "Unexpected API error message.");
   }
+
+  @When("the client retrieves post {int} without authentication")
+  public void retrievePostWithoutAuthentication(int postId) {
+    Response response = postsClient.getPostByIdWithoutAuthentication(postId);
+
+    scenarioContext.setResponse(response);
+  }
 }

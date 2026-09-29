@@ -41,3 +41,10 @@ Feature: Retrieve and create posts
     When the client retrieves post 500
     Then the response status code should be 500
     And the error message should be "Internal server error"
+    
+  @security @negative
+  Scenario: Reject a request without authentication
+    When the client retrieves post 1 without authentication
+    Then the response status code should be 401
+    And the error message should be "Unauthorized"
+    

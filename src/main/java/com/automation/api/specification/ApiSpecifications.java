@@ -2,6 +2,7 @@ package com.automation.api.specification;
 
 import static org.hamcrest.Matchers.lessThan;
 
+import com.automation.api.auth.ApiKeyAuthentication;
 import com.automation.api.config.ConfigurationManager;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.builder.ResponseSpecBuilder;
@@ -24,12 +25,23 @@ public final class ApiSpecifications {
    * @return configured request specification
    */
   public static RequestSpecification createRequestSpecification() {
+    RequestSpecBuilder builder = createRequestSpecificationBuilder();
+
+    ApiKeyAuthentication authentication = new ApiKeyAuthentication();
+
+    authentication
+        .getApiKey()
+        .ifPresent(apiKey -> builder.addHeader(ApiKeyAuthentication.HEADER_NAME, apiKey));
+
+    return builder.build();
+  }
+
+  private static RequestSpecBuilder createRequestSpecificationBuilder() {
     return new RequestSpecBuilder()
         .setBaseUri(ConfigurationManager.getRequiredProperty("base.url"))
         .setAccept(ContentType.JSON)
         .setContentType(ContentType.JSON)
-        .setConfig(createRestAssuredConfig())
-        .build();
+        .setConfig(createRestAssuredConfig());
   }
 
   /**
@@ -56,5 +68,14 @@ public final class ApiSpecifications {
             .blacklistHeader("Set-Cookie");
 
     return RestAssuredConfig.config().logConfig(logConfig);
+  }
+
+  /**
+   * Creates a request specification without authentication.
+   *
+   * @return unauthenticated request specification
+   */
+  public static RequestSpecification createUnauthenticatedRequestSpecification() {
+    return createRequestSpecificationBuilder().build();
   }
 }

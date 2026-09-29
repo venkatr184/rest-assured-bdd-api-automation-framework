@@ -53,4 +53,26 @@ public class PostsClient {
         .extract()
         .response();
   }
+
+  /**
+   * Retrieves a post without applying authentication.
+   *
+   * @param postId post identifier
+   * @return raw API response
+   */
+  public Response getPostByIdWithoutAuthentication(int postId) {
+    return given()
+        .spec(ApiSpecifications.createUnauthenticatedRequestSpecification())
+        .pathParam("postId", postId)
+        .log()
+        .ifValidationFails()
+        .when()
+        .get(ApiEndpoints.POST_BY_ID)
+        .then()
+        .log()
+        .ifValidationFails()
+        .spec(ApiSpecifications.createJsonResponseSpecification())
+        .extract()
+        .response();
+  }
 }
