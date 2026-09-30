@@ -54,6 +54,39 @@ This independently developed portfolio project demonstrates reusable API-client 
 - Controlled retry strategy for transient HTTP failures
 - Configurable retry attempts and backoff delay
 - Stateful WireMock resilience testing
+- Configurable connection, socket and connection-manager timeouts
+- Independent response-time performance assertions
+
+## Timeout Strategy
+
+The framework distinguishes transport timeouts from performance assertions.
+
+| Configuration | Purpose |
+|---|---|
+| `http.connection.timeout.ms` | Maximum time allowed to establish an HTTP connection |
+| `http.socket.timeout.ms` | Maximum time allowed while waiting for response data |
+| `http.connection.manager.timeout.ms` | Maximum wait for an available pooled connection |
+| `response.time.limit.ms` | Maximum acceptable response time validated after a response arrives |
+
+Transport timeouts stop stalled requests. The response-time limit is a test assertion and does not replace network timeout configuration.
+
+Values can be overridden using environment variables:
+
+```bash
+export HTTP_CONNECTION_TIMEOUT_MS=3000
+export HTTP_SOCKET_TIMEOUT_MS=5000
+export HTTP_CONNECTION_MANAGER_TIMEOUT_MS=3000
+export RESPONSE_TIME_LIMIT_MS=10000
+```
+
+### Validate
+
+```bash
+./mvnw spotless:apply
+./mvnw clean verify
+git diff --check
+git status --short
+```
 
 ## Architecture
 
