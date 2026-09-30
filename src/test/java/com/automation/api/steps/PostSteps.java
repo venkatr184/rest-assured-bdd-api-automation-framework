@@ -9,7 +9,7 @@ import com.automation.api.client.PostsClient;
 import com.automation.api.context.ScenarioContext;
 import com.automation.api.model.request.CreatePostRequest;
 import com.automation.api.model.response.PostResponse;
-import io.cucumber.datatable.DataTable;
+import com.automation.api.utility.JsonDataLoader;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.Response;
@@ -56,13 +56,23 @@ public class PostSteps {
         "The post title should not be null or empty.");
   }
 
-  @When("the client creates a post with the following information:")
-  public void createPost(DataTable dataTable) {
-    Map<String, String> data = dataTable.asMap(String.class, String.class);
+  /*
+    @When("the client creates a post with the following information:")
+    public void createPost(DataTable dataTable) {
+      Map<String, String> data = dataTable.asMap(String.class, String.class);
 
-    createPostRequest =
-        new CreatePostRequest(
-            Integer.parseInt(data.get("userId")), data.get("title"), data.get("body"));
+      createPostRequest =
+          new CreatePostRequest(
+              Integer.parseInt(data.get("userId")), data.get("title"), data.get("body"));
+
+      Response response = postsClient.createPost(createPostRequest);
+
+      scenarioContext.setResponse(response);
+    }
+  */
+  @When("the client creates a post using test data {string}")
+  public void createPostUsingTestData(String testDataFile) {
+    createPostRequest = JsonDataLoader.load("testdata/" + testDataFile, CreatePostRequest.class);
 
     Response response = postsClient.createPost(createPostRequest);
 
