@@ -21,10 +21,7 @@ Feature: Retrieve and create posts
 
   @regression
   Scenario: Create a new post
-    When the client creates a post with the following information:
-      | userId | 101                            |
-      | title  | REST Assured framework         |
-      | body   | Creating a post through an API |
+    When the client creates a post using test data "posts/create-post.json"
     Then the response status code should be 201
     And the response should match the post schema
     And the created post should contain the submitted information

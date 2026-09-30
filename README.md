@@ -56,6 +56,18 @@ This independently developed portfolio project demonstrates reusable API-client 
 - Stateful WireMock resilience testing
 - Configurable connection, socket and connection-manager timeouts
 - Independent response-time performance assertions
+- Typed JSON test-data loading
+- Reusable classpath-based payload files
+- Separation of test data from Gherkin implementation
+
+## Test-Data Management
+
+Small business-readable inputs may be represented directly in Gherkin tables. Larger or reusable request payloads are stored under:
+
+```text
+src/test/resources/testdata
+JSON test data → JsonDataLoader → Request model → API client
+```
 
 ## Timeout Strategy
 
@@ -271,6 +283,7 @@ allure serve target/allure-results
 - Validate unauthorized responses when credentials are missing
 - Validate recovery from a transient `503` response
 - Validate controlled retry of an idempotent GET operation
+- Create request payloads from external JSON test data
 
 ## Retry Strategy
 
