@@ -165,6 +165,21 @@ src
         └── junit-platform.properties
 ```
 
+## Execution Evidence
+
+### Allure Test Report
+
+The Allure report provides scenario results, execution timelines, environment metadata and failure evidence.
+
+![Allure report overview](docs/images/allure-report-overview.png)
+
+### GitHub Actions
+
+Every push and pull request executes the Maven quality gate and preserves Cucumber, Allure and Surefire reports.
+
+![GitHub Actions execution summary](docs/images/github-actions-summary.png)
+
+
 ## Prerequisites
 
 - Java 17 or later
