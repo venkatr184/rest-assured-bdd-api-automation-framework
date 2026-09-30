@@ -2,6 +2,7 @@ package com.automation.api.hooks;
 
 import com.automation.api.context.ScenarioContext;
 import com.automation.api.mock.WireMockService;
+import com.automation.api.utility.CorrelationIdContext;
 import io.cucumber.java.After;
 import io.cucumber.java.AfterAll;
 import io.cucumber.java.Before;
@@ -28,15 +29,26 @@ public class TestHooks {
 
   @Before
   public void beforeScenario(Scenario scenario) {
-    scenario.log("Starting scenario: " + scenario.getName());
+    CorrelationIdContext.initialize();
+
+    scenario.log(
+        "Starting scenario: "
+            + scenario.getName()
+            + " | Correlation ID: "
+            + CorrelationIdContext.get());
   }
 
   @After
   public void afterScenario(Scenario scenario) {
     try {
+      if (!scenario.isFailed()) {
+        WireMockService.verifyCorrelationId(CorrelationIdContext.get());
+      }
+
       attachResponseWhenFailed(scenario);
     } finally {
       scenarioContext.clear();
+      CorrelationIdContext.clear();
     }
   }
 

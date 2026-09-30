@@ -4,6 +4,7 @@ import static org.hamcrest.Matchers.lessThan;
 
 import com.automation.api.auth.ApiKeyAuthentication;
 import com.automation.api.config.ConfigurationManager;
+import com.automation.api.utility.CorrelationIdContext;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.config.HttpClientConfig;
@@ -42,6 +43,7 @@ public final class ApiSpecifications {
         .setBaseUri(ConfigurationManager.getRequiredProperty("base.url"))
         .setAccept(ContentType.JSON)
         .setContentType(ContentType.JSON)
+        .addHeader(CorrelationIdContext.HEADER_NAME, CorrelationIdContext.get())
         .setConfig(createRestAssuredConfig());
   }
 
