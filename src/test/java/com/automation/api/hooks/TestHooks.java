@@ -2,6 +2,7 @@ package com.automation.api.hooks;
 
 import com.automation.api.context.ScenarioContext;
 import com.automation.api.mock.WireMockService;
+import com.automation.api.reporting.AllureEnvironmentWriter;
 import com.automation.api.utility.CorrelationIdContext;
 import io.cucumber.java.After;
 import io.cucumber.java.AfterAll;
@@ -20,6 +21,7 @@ public class TestHooks {
   @BeforeAll
   public static void beforeAllScenarios() {
     WireMockService.start();
+    AllureEnvironmentWriter.write();
   }
 
   @AfterAll
