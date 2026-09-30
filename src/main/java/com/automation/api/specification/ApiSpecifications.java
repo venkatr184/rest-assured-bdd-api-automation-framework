@@ -6,6 +6,7 @@ import com.automation.api.auth.ApiKeyAuthentication;
 import com.automation.api.config.ConfigurationManager;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.builder.ResponseSpecBuilder;
+import io.restassured.config.HttpClientConfig;
 import io.restassured.config.LogConfig;
 import io.restassured.config.RestAssuredConfig;
 import io.restassured.http.ContentType;
@@ -50,15 +51,32 @@ public final class ApiSpecifications {
    * @return configured response specification
    */
   public static ResponseSpecification createJsonResponseSpecification() {
-    long timeout = Long.parseLong(ConfigurationManager.getRequiredProperty("request.timeout"));
+    long responseTimeLimit =
+        Long.parseLong(ConfigurationManager.getRequiredProperty("response.time.limit.ms"));
 
     return new ResponseSpecBuilder()
         .expectContentType(ContentType.JSON)
-        .expectResponseTime(lessThan(timeout))
+        .expectResponseTime(lessThan(responseTimeLimit))
         .build();
   }
 
   private static RestAssuredConfig createRestAssuredConfig() {
+    int connectionTimeout =
+        Integer.parseInt(ConfigurationManager.getRequiredProperty("http.connection.timeout.ms"));
+
+    int socketTimeout =
+        Integer.parseInt(ConfigurationManager.getRequiredProperty("http.socket.timeout.ms"));
+
+    int connectionManagerTimeout =
+        Integer.parseInt(
+            ConfigurationManager.getRequiredProperty("http.connection.manager.timeout.ms"));
+
+    HttpClientConfig httpClientConfig =
+        HttpClientConfig.httpClientConfig()
+            .setParam("http.connection.timeout", connectionTimeout)
+            .setParam("http.socket.timeout", socketTimeout)
+            .setParam("http.connection-manager.timeout", connectionManagerTimeout);
+
     LogConfig logConfig =
         LogConfig.logConfig()
             .blacklistHeader("Authorization")
@@ -67,7 +85,7 @@ public final class ApiSpecifications {
             .blacklistHeader("Cookie")
             .blacklistHeader("Set-Cookie");
 
-    return RestAssuredConfig.config().logConfig(logConfig);
+    return RestAssuredConfig.config().httpClient(httpClientConfig).logConfig(logConfig);
   }
 
   /**
