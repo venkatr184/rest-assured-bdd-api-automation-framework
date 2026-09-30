@@ -63,6 +63,8 @@ This independently developed portfolio project demonstrates reusable API-client 
 - Correlation preservation across retries
 - WireMock request-header verification
 - Thread-local cleanup for parallel safety
+- Automatic Allure environment metadata
+- Execution-mode and parallelism reporting
 
 ## Request Correlation
 
@@ -113,6 +115,7 @@ export RESPONSE_TIME_LIMIT_MS=10000
 ./mvnw spotless:apply
 ./mvnw clean verify
 git diff --check
+cat target/allure-results/environment.properties
 git status --short
 ```
 
@@ -283,6 +286,24 @@ For temporary local viewing:
 
 ```bash
 allure serve target/allure-results
+```
+
+### Allure Environment Information
+
+Each Allure execution records:
+
+- Selected test environment
+- WireMock or external API execution mode
+- Java version
+- Operating system
+- Processor architecture
+- Parallel-execution status
+- Configured parallelism
+
+The metadata is generated at:
+
+```text
+target/allure-results/environment.properties
 ```
 
 ## Current Test Coverage
