@@ -2,16 +2,19 @@ package com.automation.api.mock;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.absent;
+import static com.github.tomakehurst.wiremock.client.WireMock.anyRequestedFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.containing;
 import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.equalToJson;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
+import static com.github.tomakehurst.wiremock.client.WireMock.moreThanOrExactly;
 import static com.github.tomakehurst.wiremock.client.WireMock.post;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
 
 import com.automation.api.auth.ApiKeyAuthentication;
+import com.automation.api.utility.CorrelationIdContext;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.stubbing.Scenario;
 
@@ -218,5 +221,16 @@ public final class WireMockService {
                     .withStatus(200)
                     .withHeader(CONTENT_TYPE, APPLICATION_JSON)
                     .withBody(successfulResponse)));
+  }
+
+  public static void verifyCorrelationId(String correlationId) {
+    if (!isEnabled() || !isRunning()) {
+      return;
+    }
+
+    server.verify(
+        moreThanOrExactly(1),
+        anyRequestedFor(urlPathMatching(".*"))
+            .withHeader(CorrelationIdContext.HEADER_NAME, equalTo(correlationId)));
   }
 }

@@ -59,6 +59,22 @@ This independently developed portfolio project demonstrates reusable API-client 
 - Typed JSON test-data loading
 - Reusable classpath-based payload files
 - Separation of test data from Gherkin implementation
+- Scenario-scoped correlation IDs
+- Correlation preservation across retries
+- WireMock request-header verification
+- Thread-local cleanup for parallel safety
+
+## Request Correlation
+
+Every scenario receives a unique `X-Correlation-ID` header.
+
+```text
+Cucumber scenario
+    → CorrelationIdContext
+    → REST Assured request specification
+    → API request
+    → WireMock verification
+```
 
 ## Test-Data Management
 
@@ -284,6 +300,8 @@ allure serve target/allure-results
 - Validate recovery from a transient `503` response
 - Validate controlled retry of an idempotent GET operation
 - Create request payloads from external JSON test data
+- Verify correlation IDs are sent with every API request
+- Verify retry attempts preserve the same correlation ID
 
 ## Retry Strategy
 
