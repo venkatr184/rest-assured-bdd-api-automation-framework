@@ -1,81 +1,70 @@
 name: API Automation Tests
-
-on:
+'on':
   push:
     branches:
       - main
   pull_request:
     branches:
       - main
-  workflow_dispatch:
-
+  workflow_dispatch: null
 permissions:
   contents: read
-
 concurrency:
-  group: api-tests-${{ github.workflow }}-${{ github.ref }}
+  group: 'api-tests-${{ github.workflow }}-${{ github.ref }}'
   cancel-in-progress: true
-
 jobs:
   test:
     name: Java 17 API Test Suite
     runs-on: ubuntu-latest
     timeout-minutes: 15
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
-        
       - name: Ensure Maven Wrapper is executable
         run: chmod +x mvnw
-    
       - name: Set up Java 17
         uses: actions/setup-java@v6
         with:
           distribution: temurin
-          java-version: "17"
+          java-version: '17'
           cache: maven
-
       - name: Display tool versions
         run: |
           java -version
           ./mvnw -version
-
       - name: Run tests and quality check
         run: ./mvnw --batch-mode --no-transfer-progress clean verify
-
       - name: Upload test reports
         id: test-reports
         if: always()
         uses: actions/upload-artifact@v7
         with:
-          name: api-test-reports-${{ github.run_number }}
+          name: 'api-test-reports-${{ github.run_number }}'
           path: |
             target/cucumber-report/
             target/allure-results/
             target/surefire-reports/
           if-no-files-found: warn
           retention-days: 14
-
       - name: Publish execution summary
         if: always()
-          run: |
-            {
-              echo "## REST Assured BDD API Test Results"
-              echo ""
-              echo "| Item | Value |"
-              echo "| --- | --- |"
-              echo "| Result | ${{ job.status }} |"
-              echo "| Java | 17 – Temurin |"
-              echo "| Execution mode | Embedded WireMock |"
-              echo "| Branch or tag | \`${{ github.ref_name }}\` |"
-              echo "| Commit | \`${{ github.sha }}\` |"
-              echo "| Workflow run | \`${{ github.run_number }}\` |"
-              echo "| Reports | [Download test reports](${{ steps.test-reports.outputs.artifact-url }}) |"
-              echo ""
-              echo "### Included reports"
-              echo ""
-              echo "- Cucumber HTML and JSON"
-              echo "- Allure raw results and environment metadata"
-              echo "- Maven Surefire reports"
-            } >> "$GITHUB_STEP_SUMMARY"
+        run: |
+          {
+            echo "## REST Assured BDD API Test Results"
+            echo ""
+            echo "| Item | Value |"
+            echo "| --- | --- |"
+            echo "| Result | ${{ job.status }} |"
+            echo "| Java | 17 – Temurin |"
+            echo "| Execution mode | Embedded WireMock |"
+            echo "| Branch or tag | \`${{ github.ref_name }}\` |"
+            echo "| Commit | \`${{ github.sha }}\` |"
+            echo "| Workflow run | \`${{ github.run_number }}\` |"
+            echo "| Reports | [Download test reports](${{ steps.test-reports.outputs.artifact-url }}) |"
+            echo ""
+            echo "### Included reports"
+            echo ""
+            echo "- Cucumber HTML and JSON"
+            echo "- Allure raw results and environment metadata"
+            echo "- Maven Surefire reports"
+          } >> "$GITHUB_STEP_SUMMARY"
