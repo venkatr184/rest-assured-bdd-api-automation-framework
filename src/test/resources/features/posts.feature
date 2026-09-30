@@ -47,4 +47,10 @@ Feature: Retrieve and create posts
     When the client retrieves post 1 without authentication
     Then the response status code should be 401
     And the error message should be "Unauthorized"
-    
+
+  @resilience @regression
+  Scenario: Recover from a transient service failure
+    When the client retrieves post 503 with transient retry
+    Then the response status code should be 200
+    And the response should match the post schema
+    And the response should contain post ID 503

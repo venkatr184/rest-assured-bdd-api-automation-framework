@@ -115,4 +115,11 @@ public class PostSteps {
 
     scenarioContext.setResponse(response);
   }
+
+  @When("the client retrieves post {int} with transient retry")
+  public void retrievePostWithRetry(int postId) {
+    Response response = postsClient.getPostByIdWithRetry(postId);
+
+    scenarioContext.setResponse(response);
+  }
 }

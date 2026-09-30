@@ -51,6 +51,9 @@ This independently developed portfolio project demonstrates reusable API-client 
 - Authorized and unauthorized API scenarios
 - Automated Maven and GitHub Actions dependency updates
 - Reproducible Maven builds through Maven Wrapper
+- Controlled retry strategy for transient HTTP failures
+- Configurable retry attempts and backoff delay
+- Stateful WireMock resilience testing
 
 ## Architecture
 
@@ -233,6 +236,33 @@ allure serve target/allure-results
 - Validate internal-server-error responses
 - Validate authenticated API requests
 - Validate unauthorized responses when credentials are missing
+- Validate recovery from a transient `503` response
+- Validate controlled retry of an idempotent GET operation
+
+## Retry Strategy
+
+Retries are applied only to explicitly retryable, idempotent operations.
+
+Retryable status codes:
+
+- `429 Too Many Requests`
+- `502 Bad Gateway`
+- `503 Service Unavailable`
+- `504 Gateway Timeout`
+
+The framework does not automatically retry:
+
+- Client errors such as `400`, `401`, `403` and `404`
+- Business assertion failures
+- Non-idempotent POST requests
+- Every `500` response without an approved service-specific rule
+
+Retry settings are configured through:
+
+```properties
+retry.max.attempts=3
+retry.delay.ms=200
+```
 
 ## Security
 

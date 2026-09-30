@@ -13,6 +13,7 @@ import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options
 
 import com.automation.api.auth.ApiKeyAuthentication;
 import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.stubbing.Scenario;
 
 public final class WireMockService {
 
@@ -22,6 +23,9 @@ public final class WireMockService {
   private static WireMockServer server;
   private static final String TEST_API_KEY = "portfolio-test-api-key";
   private static final String API_KEY_PROPERTY = "api.key";
+
+  private static final String RETRY_SCENARIO = "Transient post retrieval";
+  private static final String SERVICE_AVAILABLE = "Service available";
 
   private WireMockService() {
     // Prevent object creation.
@@ -65,6 +69,7 @@ public final class WireMockService {
     registerGetPostStubs();
     registerCreatePostStub();
     registerServerErrorStub();
+    registerTransientFailureStub();
     registerPostNotFoundStub();
   }
 
@@ -171,5 +176,47 @@ public final class WireMockService {
                     .withStatus(401)
                     .withHeader(CONTENT_TYPE, APPLICATION_JSON)
                     .withBody(responseBody)));
+  }
+
+  private static void registerTransientFailureStub() {
+    String unavailableResponse =
+        """
+	            {
+	              "error": "Service temporarily unavailable"
+	            }
+	            """;
+
+    String successfulResponse =
+        """
+	            {
+	              "userId": 1,
+	              "id": 503,
+	              "title": "Recovered post",
+	              "body": "Request succeeded after a transient failure"
+	            }
+	            """;
+
+    server.stubFor(
+        get(urlEqualTo("/posts/503"))
+            .withHeader(ApiKeyAuthentication.HEADER_NAME, equalTo(TEST_API_KEY))
+            .inScenario(RETRY_SCENARIO)
+            .whenScenarioStateIs(Scenario.STARTED)
+            .willReturn(
+                aResponse()
+                    .withStatus(503)
+                    .withHeader(CONTENT_TYPE, APPLICATION_JSON)
+                    .withBody(unavailableResponse))
+            .willSetStateTo(SERVICE_AVAILABLE));
+
+    server.stubFor(
+        get(urlEqualTo("/posts/503"))
+            .withHeader(ApiKeyAuthentication.HEADER_NAME, equalTo(TEST_API_KEY))
+            .inScenario(RETRY_SCENARIO)
+            .whenScenarioStateIs(SERVICE_AVAILABLE)
+            .willReturn(
+                aResponse()
+                    .withStatus(200)
+                    .withHeader(CONTENT_TYPE, APPLICATION_JSON)
+                    .withBody(successfulResponse)));
   }
 }
